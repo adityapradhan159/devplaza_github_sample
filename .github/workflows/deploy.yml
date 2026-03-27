@@ -1,8 +1,9 @@
 name: Deploy Project
 
 on:
-  workflow_run:                        
-    workflows: ["Build Project"]      
+  workflow_run:
+    workflows:
+      - Build Project 
     types:
       - completed
     branches:
@@ -11,19 +12,20 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}  
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: build-output
-          path: dist/                
+          path: dist/      
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to Firebase
         run: |
           npm install -g firebase-tools
-          firebase deploy --only hosting:your-site-name
-
+          firebase deploy --only hosting:your-site-name 
         env:
-          FIREBASE_TOKEN: your-firebase-site-name
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
