@@ -26,4 +26,4 @@ jobs:
           firebase deploy --only hosting:your-site-name
 
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: your-firebase-site-name
